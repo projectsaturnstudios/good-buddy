@@ -110,16 +110,14 @@ class LLMSpeakDriver extends RobotBrains
 
         if($response = $request->send())
         {
-            VarDumper::dump('Agent Response');
-            VarDumper::dump($response->toArray(), 'Agent Response');
-            if(!empty(ltrim($response->message))) $chat = $chat->addToConversation('assistant', $response->message);
+            logger()->log('info', 'Agent Response', $response->toArray());
+            if(!empty(ltrim($response->message))) $chat = $chat->addToConversation('assistant', $response->message, $provider);
             if($response->hasToolRequest())
             {
                 $payload = $this->parseToolRequest($provider, $response->tool_request, $chat);
                 $chat = $chat::load($chat->session_id);
                 $tool_result = ToolTime::execute($payload);
-                VarDumper::dump('Executed tool');
-                VarDumper::dump($tool_result, 'Executed tool');
+                logger()->log('info', 'Executed tool', $tool_result);
                 $chat = $this->processToolResult($provider, $tool_result, $chat);
                 try {
                     return $this->compileAndSend($provider, $model, $instructions, $chat->toTranscription($provider, $model), $tools, $chat);
@@ -154,7 +152,7 @@ class LLMSpeakDriver extends RobotBrains
                     switch($provider)
                     {
                         case 'gemini':
-                            $chat = $chat->addObjectToConversation('function', [
+                            $chat = $chat->addObjectToConversation('model', [
                                 'functionResponse' => [
                                     'name' => $this->tool_user_id,
                                     'response' => ['payload' => json_decode($result['text'], true)]
@@ -227,7 +225,7 @@ class LLMSpeakDriver extends RobotBrains
 
             case 'gemini':
                 $this->tool_user_id = $tool_call['name'];
-                $chat->addObjectToConversation('function', ['functionCall' => $tool_call]);
+                $chat->addObjectToConversation('model', ['functionCall' => $tool_call]);
                 $payload = [
                     'tool' => $tool_call['name'],
                     'params' => $tool_call['args']

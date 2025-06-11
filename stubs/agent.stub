@@ -1,0 +1,30 @@
+<?php
+
+namespace {{ namespace }};
+
+use Agents\GoodBuddy\LocallyTooledAgent;
+
+class {{ class }} extends LocallyTooledAgent
+{
+    protected string $model = '{{ model }}';
+    protected string $provider = '{{ provider }}';
+
+    protected string $memory = '{{ memory }}';
+
+    protected string $chat_session_provider = '{{ chat_session_provider }}';
+
+    public function __construct(?string $session_id = null)
+    {
+        parent::__construct($session_id);
+        $this->tools = [
+            {{ tools_array }}
+        ];
+    }
+
+    public function instructions(): array
+    {
+        return [
+            {{ instructions }}
+        ];
+    }
+} 

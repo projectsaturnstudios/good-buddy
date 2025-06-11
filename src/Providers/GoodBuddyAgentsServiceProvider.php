@@ -2,6 +2,7 @@
 
 namespace Agents\GoodBuddy\Providers;
 
+use Agents\GoodBuddy\Console\Commands\MakeLocalAgentCommand;
 use Agents\GoodBuddy\Managers\ChatHistoryManager;
 use Agents\GoodBuddy\Managers\LLMProviderManager;
 use Agents\GoodBuddy\Managers\ToolManager;
@@ -13,6 +14,10 @@ class GoodBuddyAgentsServiceProvider extends ServiceProvider
         'agents.local-agents' => __DIR__ .'/../../config/agents/local-agents.php',
     ];
 
+    protected array $commands = [
+        MakeLocalAgentCommand::class
+    ];
+
     public function register(): void
     {
         $this->registerConfigs();
@@ -22,6 +27,7 @@ class GoodBuddyAgentsServiceProvider extends ServiceProvider
     {
         $this->publishConfigs();
         $this->registerManagers();
+        $this->commands($this->commands);
     }
 
     protected function registerManagers(): void

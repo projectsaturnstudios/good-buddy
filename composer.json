@@ -2,7 +2,7 @@
     "name": "projectsaturnagents/good-buddy",
     "description": "A Laravel package for creating AI Agents using local tools",
     "type": "library",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "license": "MIT",
     "authors": [
         {

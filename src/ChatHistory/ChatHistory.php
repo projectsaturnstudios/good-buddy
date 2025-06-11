@@ -20,8 +20,9 @@ abstract class ChatHistory extends Data
         return ChatManager::load($session_id);
     }
 
-    public function addToConversation(string $role, string $message): static
+    public function addToConversation(string $role, string $message, ?string $provider = null): static
     {
+        if(($provider == 'gemini') && ($role == 'assistant')) $role = 'model';
         $this->conversation[] = [
             'role' => $role,
             'content' => $message
@@ -29,8 +30,9 @@ abstract class ChatHistory extends Data
         return $this->save();
     }
 
-    public function addObjectToConversation(string $role, array $message): static
+    public function addObjectToConversation(string $role, array $message, ?string $provider = null): static
     {
+        if(($provider == 'gemini') && ($role == 'assistant')) $role = 'model';
         $this->conversation[] = [
             'role' => $role,
             'content' => $message

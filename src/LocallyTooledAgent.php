@@ -35,20 +35,25 @@ abstract class LocallyTooledAgent
 
     protected function createOrLoadConvo(): void
     {
-        $this->chat = ChatManager::createOrLoad($this->chat_session_id);
+        $this->chat = ChatManager::createOrLoad($this->chat_session_id, $this->chat_session_provider);
     }
 
     public function start(?string $message = null): ?array
     {
         $this->chat = $this->chat->addToConversation('user', $message);
 
-        $response = AIBrains::driver()->compileAndSend(
-            $this->provider, $this->model, $this->instructions(),
-            $this->chat->toTranscription($this->provider, $this->model),
-            $this->tools, $this->chat
-        );
+        try {
 
-        dd($response);
+            $response = AIBrains::driver()->compileAndSend(
+                $this->provider, $this->model, $this->instructions(),
+                $this->chat->toTranscription($this->provider, $this->model),
+                $this->tools, $this->chat
+            );
+        }
+        catch(\Exception $e) {
+            dd($e->getMessage());
+        }
+
         return $response;
     }
 
