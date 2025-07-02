@@ -2,29 +2,34 @@
 
 namespace {{ namespace }};
 
-use Agents\GoodBuddy\LocallyTooledAgent;
+use Agents\GoodBuddy\GoodBuddy;
 
-class {{ class }} extends LocallyTooledAgent
+class {{ class }} extends GoodBuddy
 {
-    protected string $model = '{{ model }}';
-    protected string $provider = '{{ provider }}';
+    protected ?string $model = '{{ model }}'; // claude-sonnet-4-20250514, gemini-2.5-flash
+    protected ?string $connection = '{{ connection }}'; // anthropic, gemini
+    protected ?string $memory_store = '{{ memory_store }}'; // cached, database
 
-    protected string $memory = '{{ memory }}';
+    protected array $default_system_instructions = [
+        'You are a helpful assistant.',
 
-    protected string $chat_session_provider = '{{ chat_session_provider }}';
+    ];
 
-    public function __construct(?string $session_id = null)
+    protected array $tools = [];
+
+    protected ?int $max_tokens = {{ max_tokens }};
+
+    protected float $temperature = {{ temperature }};
+
+    public function credentials(): array
     {
-        parent::__construct($session_id);
-        $this->tools = [
-            {{ tools_array }}
-        ];
+        // @todo - remove to auto-default credentials or overwrite to roll your own.
+        return parent::credentials();
     }
 
-    public function instructions(): array
+    protected function work(array $input): void
     {
-        return [
-            {{ instructions }}
-        ];
+        // @todo - remove to auto-default to Base Agent ChatBot Behavior or overwrite to roll your own.
+        parent::work($input);
     }
-} 
+}

@@ -2,20 +2,22 @@
 
 namespace Agents\GoodBuddy\Providers;
 
-use Agents\GoodBuddy\Console\Commands\MakeLocalAgentCommand;
-use Agents\GoodBuddy\Managers\ChatHistoryManager;
-use Agents\GoodBuddy\Managers\LLMProviderManager;
-use Agents\GoodBuddy\Managers\ToolManager;
+use Agents\GoodBuddy\Console\Commands\AgentTestCommand;
+use Agents\GoodBuddy\Console\Commands\CreateAgentCommand;
+use Agents\GoodBuddy\Managers\LLMCommunicationManager;
+use Agents\GoodBuddy\Managers\MemoryStoreManager;
+use Agents\GoodBuddy\Managers\ToolExecutionManager;
 use Illuminate\Support\ServiceProvider;
 
 class GoodBuddyAgentsServiceProvider extends ServiceProvider
 {
     protected array $config = [
-        'agents.local-agents' => __DIR__ .'/../../config/agents/local-agents.php',
+        'agents.local' => __DIR__ .'/../../config/agents/local.php',
     ];
 
     protected array $commands = [
-        MakeLocalAgentCommand::class
+        CreateAgentCommand::class,
+        AgentTestCommand::class,
     ];
 
     public function register(): void
@@ -32,15 +34,15 @@ class GoodBuddyAgentsServiceProvider extends ServiceProvider
 
     protected function registerManagers(): void
     {
-        ChatHistoryManager::boot();
-        LLMProviderManager::boot();
-        ToolManager::boot();
+        MemoryStoreManager::boot();
+        ToolExecutionManager::boot();
+        LLMCommunicationManager::boot();
     }
 
     protected function publishConfigs() : void
     {
         $this->publishes([
-            $this->config['agents.local-agents'] => config_path('agents/local-agents.php'),
+            $this->config['agents.local'] => config_path('agents/local.php'),
         ], 'agents.good-buddy');
     }
 

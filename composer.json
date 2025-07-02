@@ -2,7 +2,7 @@
     "name": "projectsaturnagents/good-buddy",
     "description": "A Laravel package for creating AI Agents using local tools",
     "type": "library",
-    "version": "0.1.1",
+    "version": "0.3.0",
     "license": "MIT",
     "authors": [
         {
@@ -12,17 +12,13 @@
     ],
     "require": {
         "php": "^8.2",
-        "projectsaturnstudios/llm-speak": "^0.1.0",
-        "projectsaturnstudios/superconductor-core": "^0.2.0"
+        "projectsaturnstudios/pocketflow-php": "^0.1.2"
     },
     "require-dev": {},
     "autoload":{
         "psr-4": {
             "Agents\\GoodBuddy\\": "src/"
-        },
-        "files": [
-            "src/Helpers/functions.php"
-        ]
+        }
     },
     "autoload-dev":{
         "psr-4": {}
