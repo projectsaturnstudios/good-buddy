@@ -32,7 +32,7 @@ class ProcessToolResult extends Node
         $convo = $prep_res['conversation_history'];
         foreach($prep_res['tool_results'] as $tool_result)
         {
-            $convo->addToolResult($tool_result);
+            $convo = $convo->addToolResult($tool_result);
         }
 
         return $convo;
@@ -43,7 +43,6 @@ class ProcessToolResult extends Node
         VarDumper::dump('Starting the loop over calling the llm!');
         $this->next(new ContactLLMNode(), 'call')
             ->next(new ProcessLLMOutputNode(), 'output');
-
         return 'call';
     }
 }
